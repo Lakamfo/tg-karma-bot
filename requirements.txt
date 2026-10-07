@@ -1,0 +1,4 @@
+aiogram
+aiosqlite
+sqlalchemy
+python-dotenv

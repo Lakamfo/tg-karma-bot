@@ -1,0 +1,5 @@
+﻿.idea
+.env
+karma.db
+__pycache__/
+.venv/
