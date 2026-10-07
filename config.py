@@ -9,8 +9,10 @@ GROUP_ID = os.getenv("GROUP_ID", "-100")
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN not found! Set in .env file")
 
-DB_URL = os.getenv("DB_URL", "sqlite+aiosqlite:///godette.db")
+DB_URL = os.getenv("DB_URL", "sqlite+aiosqlite:///karma.db")
 
+API_HOST = os.getenv("API_HOST", "127.0.0.1")
+API_PORT = int(os.getenv("API_PORT", 8000))
 
 KARMA_COOLDOWN_SECONDS = 9
 DAILY_KARMA_LIMIT = 10

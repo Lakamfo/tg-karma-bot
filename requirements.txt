@@ -2,3 +2,5 @@ aiogram
 aiosqlite
 sqlalchemy
 python-dotenv
+fastapi
+uvicorn
