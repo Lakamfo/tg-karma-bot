@@ -31,6 +31,17 @@ class KarmaLog(Base):
     message_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+class ArchivedKarmaLog(Base):
+    __tablename__ = "archived_karma_logs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    from_user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    to_user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    change: Mapped[int] = mapped_column(Integer, nullable=False)
+    chat_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    message_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    archived_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 async def init_db():
     async with engine.begin() as conn:

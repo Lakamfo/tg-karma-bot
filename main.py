@@ -2,22 +2,34 @@ import asyncio
 import logging
 import uvicorn
 from aiogram import Bot, Dispatcher
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config import BOT_TOKEN, API_HOST, API_PORT
 from database import init_db
 from handlers import router
 from api import app
+from backup import send_backup
 
 
 async def start_bot():
-    """Starts the Telegram bot polling."""
+    """Starts the Telegram bot polling and background tasks."""
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher()
     dp.include_router(router)
 
-    print("🤖 Bot started!")
-    await dp.start_polling(bot)
+    scheduler = AsyncIOScheduler()
 
+    scheduler.add_job(
+        send_backup,
+        trigger="interval",
+        hours=24,
+        kwargs={"bot": bot}
+    )
+
+    scheduler.start()
+    print("🤖 Bot and APScheduler started!")
+
+    await dp.start_polling(bot)
 
 async def start_api():
     """Starts the FastAPI web server."""
@@ -35,7 +47,6 @@ async def start_api():
 async def main():
     logging.basicConfig(level=logging.INFO)
 
-    # Initialize database tables
     await init_db()
 
     # Run Bot and API concurrently

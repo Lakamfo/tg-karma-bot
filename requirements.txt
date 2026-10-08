@@ -4,3 +4,6 @@ sqlalchemy
 python-dotenv
 fastapi
 uvicorn
+sqlalchemy[asyncio]
+greenlet
+apscheduler

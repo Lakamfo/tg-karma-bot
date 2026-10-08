@@ -1,0 +1,23 @@
+[Unit]
+Description=Godette Bot
+After=network.target
+
+[Service]
+Type=simple
+User=lakamfo
+WorkingDirectory=/opt/godette-bot/
+
+ExecStart=/opt/godette-bot/.venv/bin/python /opt/godette-bot/main.py
+
+Restart=always
+RestartSec=3
+
+KillMode=mixed
+
+Environment=PYTHONUNBUFFERED=1
+
+StandardOutput=append:/opt/godette-bot/logs/out.log
+StandardError=append:/opt/godette-bot/logs/err.log
+
+[Install]
+WantedBy=multi-user.target
