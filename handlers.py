@@ -1,9 +1,11 @@
 import logging
 import re
+import asyncio
 from datetime import datetime, timedelta, timezone
 
 from aiogram import Router, F
 from aiogram.filters import Command
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from sqlalchemy import select, func, delete
 
@@ -81,6 +83,26 @@ async def process_undo_karma(callback: CallbackQuery):
         await callback.message.edit_text(edit_text, reply_markup=None, parse_mode="HTML")
 
 
+async def remove_undo_button_after_timeout(bot, chat_id: int, message_id: int, log_id: int, delay: int):
+    """
+    Waits for `delay` seconds, checks if the karma log still exists,
+    and removes the inline keyboard from the message when time expires.
+    """
+    await asyncio.sleep(delay)
+
+    async with async_session() as session:
+        karma_log = await session.get(KarmaLog, log_id)
+        if karma_log:
+            try:
+                await bot.edit_message_reply_markup(
+                    chat_id=chat_id,
+                    message_id=message_id,
+                    reply_markup=None
+                )
+            except TelegramBadRequest:
+                pass
+
+
 @router.message(Command("help"))
 async def cmd_help(message: Message):
     """
@@ -148,7 +170,7 @@ async def cmd_top(message: Message):
             return
 
         lines = [MESSAGES["top_title"]]
-        for i, u in enumerate(top_users, start=1):
+        for i, u in enumerate(top_users, start=0):
             lines.append(MESSAGES["top_item"].format(index=i, user_name=u.full_name, karma=u.karma))
 
         await message.answer("\n".join(lines), parse_mode="HTML")
@@ -176,7 +198,7 @@ async def cmd_middle_top(message: Message):
 
         # Make list
         users_list = ""
-        for index, user in enumerate(users, start=11):
+        for index, user in enumerate(users, start=10):
             users_list += MESSAGES["middle_top_item"].format(
                 rank=index,
                 name=user.full_name,
@@ -417,9 +439,9 @@ async def process_messages_and_karma(message: Message):
 
     # Identify karma action (+1, -1) from text triggers
     karma_change = 0
-    if text == "+":
+    if text.startswith("+"):
         karma_change = 1
-    elif text == "-":
+    elif text.startswith("-"):
         karma_change = -1
     elif any(text.startswith(variant) for variant in THANK_YOU_VARIANTS):
         karma_change = 1
@@ -514,4 +536,14 @@ async def process_messages_and_karma(message: Message):
                 ]]
             )
 
-            await message.reply(reply_text, reply_markup=keyboard, parse_mode="HTML")
+            sent_msg = await message.reply(reply_text, reply_markup=keyboard, parse_mode="HTML")
+
+            asyncio.create_task(
+                remove_undo_button_after_timeout(
+                    bot=message.bot,
+                    chat_id=sent_msg.chat.id,
+                    message_id=sent_msg.message_id,
+                    log_id=karma_log.id,
+                    delay=UNDO_TIMEOUT_SECONDS
+                )
+            )

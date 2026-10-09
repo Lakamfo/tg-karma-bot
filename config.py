@@ -49,7 +49,7 @@ MESSAGES = {
     "top_title": "🏆 <b>ТОП-10 по карме:</b>\n",
     "top_item": "{index}. {user_name} — <b>{karma}</b> кармы",
     "top_empty": "Список лидеров пока пуст.",
-    "middle_top_title": "📊 <b>Топ пользователей (11–20 места):</b>\n\n{list}",
+    "middle_top_title": "📊 <b>Топ пользователей (10–19 места):</b>\n\n{list}",
     "middle_top_empty": "ℹ️ В базе пока недостаточно пользователей для отображения этого топа.",
     "middle_top_item": "{rank}. <b>{name}</b> — {karma} кармы\n",
     "invalid_rollback_format": (
