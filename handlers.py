@@ -300,6 +300,7 @@ async def cmd_rollback_karma(message: Message):
                 change=log.change,
                 chat_id=log.chat_id,
                 message_id=log.message_id,
+                raw_text=log.raw_text,
                 created_at=log.created_at,
                 archived_at=now
             )
@@ -411,6 +412,7 @@ async def cmd_set_karma(message: Message):
             change=karma_diff,
             chat_id=message.chat.id,
             message_id=message.message_id,
+            raw_text=message.text,
             created_at=now
         )
         session.add(karma_log)
@@ -505,6 +507,7 @@ async def process_messages_and_karma(message: Message):
                 change=karma_change,
                 chat_id=message.chat.id,
                 message_id=message.message_id,
+                raw_text=message.text,
                 created_at=now
             )
             session.add(karma_log)

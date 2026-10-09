@@ -29,6 +29,7 @@ class KarmaLog(Base):
     change: Mapped[int] = mapped_column(Integer, nullable=False)
     chat_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     message_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    raw_text: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class ArchivedKarmaLog(Base):
@@ -40,6 +41,7 @@ class ArchivedKarmaLog(Base):
     change: Mapped[int] = mapped_column(Integer, nullable=False)
     chat_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     message_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    raw_text: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     archived_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
