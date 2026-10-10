@@ -338,6 +338,11 @@ async def cmd_set_karma(message: Message):
     if message.chat.id != GROUP_ID:
         return
 
+    if message.reply_to_message:
+        reply = message.reply_to_message
+        if reply.forum_topic_created and reply.from_user:
+            return
+
     member = await message.bot.get_chat_member(message.chat.id, message.from_user.id)
     if member.status not in ["creator", "administrator"]:
         return
@@ -436,6 +441,11 @@ async def process_messages_and_karma(message: Message):
         return
     if not message.from_user or message.from_user.is_bot:
         return
+
+    if message.reply_to_message:
+        reply = message.reply_to_message
+        if reply.forum_topic_created and reply.from_user:
+            return
 
     text = message.text.strip().lower()
 
