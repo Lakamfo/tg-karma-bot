@@ -432,7 +432,7 @@ async def cmd_set_karma(message: Message):
         await message.reply(response_text, parse_mode="HTML")
 
 
-@router.message(F.text)
+@router.message(F.text | F.caption)
 async def process_messages_and_karma(message: Message):
     """
     Increments user message counts and processes karma changes via reply triggers.
@@ -447,7 +447,7 @@ async def process_messages_and_karma(message: Message):
         if reply.forum_topic_created and reply.from_user:
             return
 
-    text = message.text.strip().lower()
+    text = message.text.strip().lower() or message.caption.strip().lower()
 
     # Identify karma action (+1, -1) from text triggers
     karma_change = 0

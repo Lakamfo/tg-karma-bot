@@ -82,7 +82,7 @@ MESSAGES = {
     "karma_undone_alert": "Карма успешно отменена!",
     "karma_undo_not_allowed": "❌ Вы не можете отменить это действие, так как не вы изменяли карму!",
     "karma_already_undone": "⚠️ Это изменение кармы уже было отменено.",
-    "karma_undone_message": "↩️ <b>{sender_name}</b> отменил(а) изменение кармы для <b>{target_name}</b>.",
+    "karma_undone_message": "<b>{sender_name}</b> отменил(а) изменение кармы для <b>{target_name}</b>.",
 }
 
 THANK_YOU_VARIANTS = {
