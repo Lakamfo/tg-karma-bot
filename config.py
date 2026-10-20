@@ -78,7 +78,7 @@ MESSAGES = {
                 "> Предыдущая карма: <b>{old_karma}</b>\n"
                 "> Новая карма: <b>{new_karma}</b>"
             ),
-    "karma_undo_button": "↩️ Отменить",
+    "karma_undo_button": "Отменить",
     "karma_undone_alert": "Карма успешно отменена!",
     "karma_undo_not_allowed": "❌ Вы не можете отменить это действие, так как не вы изменяли карму!",
     "karma_already_undone": "⚠️ Это изменение кармы уже было отменено.",
